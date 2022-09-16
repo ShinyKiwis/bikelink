@@ -2,7 +2,9 @@ import { useState } from "react";
 import SearchBarStyle from "./SearchBar.module.css";
 import { BsSearch } from "react-icons/bs";
 import { GoSettings } from "react-icons/go";
+import { Autocomplete, useLoadScript } from "@react-google-maps/api";
 
+const libraries = ["places"];
 const Filter = () => {
   return (
     <div className={SearchBarStyle.filter_container}>
@@ -39,24 +41,38 @@ const SearchInput = () => {
   return (
     <div className={SearchBarStyle.search_input_container}>
       <BsSearch className={SearchBarStyle.search_icon} />
-      <input
-        type="text"
-        placeholder="Search Location"
-        className={SearchBarStyle.search_input}
-      />
+      <Autocomplete
+        restrictions={{
+          country: "VN",
+        }}
+      >
+        <input
+          type="text"
+          placeholder="Search Location"
+          className={SearchBarStyle.search_input}
+        />
+      </Autocomplete>
     </div>
   );
 };
 
+export { SearchInput };
+
 const SearchBar = () => {
+  // Loaded Google Map here in order for AutoComplete to work
+  // The API keep saying quota limitation
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: "AIzaSyCKniK9_dNXRmhFfksN5bKJrxQ2Kz0dFK8",
+    libraries: libraries,
+  });
   const [selectedFilter, setSelectedFilter] = useState([]);
   const filterOptions = ["Place", "Bus", "Bike", "Theaters", "Markets"];
-  return (
+  return isLoaded ? (
     <>
       <div className={SearchBarStyle.search_container}>
         <SearchInput />
-        <Filter />
       </div>
+      <Filter />
       <div className={SearchBarStyle.filter_options_container}>
         {filterOptions.map((option) => (
           <FilterItem
@@ -67,6 +83,8 @@ const SearchBar = () => {
         ))}
       </div>
     </>
+  ) : (
+    <div>Google Maps is loading</div>
   );
 };
 
