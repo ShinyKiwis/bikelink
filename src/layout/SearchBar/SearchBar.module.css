@@ -57,6 +57,7 @@
     color: var(--primary-color);
     font-weight: bold;
     border: none;
+    background-color: white;
 }
 
 .search_input_container input::placeholder {

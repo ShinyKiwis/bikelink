@@ -23,6 +23,21 @@ const currentPos = {
   lng: 106.80163278225437,
 };
 
+const foodShops = [
+  {
+    lat: 10.877631992125885, 
+    lng: 106.80922815880977
+  },
+  {
+    lat: 10.881349049562433, 
+    lng:106.8112306239279
+  },
+  {
+    lat: 10.882766400203234, 
+    lng:106.8120717549753
+  }
+]
+
 const coffeeShops = [
   {
     lat: 10.87499806630411,
@@ -44,6 +59,10 @@ const coffeeShops = [
     lat: 10.872947388585832,
     lng: 106.79872198927286,
   },
+  {
+    lat: 10.875440220610354, 
+    lng: 106.80716356465716
+  }
 ];
 
 const buses = [
@@ -107,7 +126,7 @@ const buses = [
 
 function MyComponent() {
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyCKniK9_dNXRmhFfksN5bKJrxQ2Kz0dFK8",
+    googleMapsApiKey: "AIzaSyACB4Wr6HTShXaKeAq2XWPW1NSsv5trMTk",
     libraries: libraries,
   });
 
@@ -137,9 +156,15 @@ function MyComponent() {
       <>
         <Marker position={currentPos} />
         {buses.map((bus) => {
-          return <Marker position={bus} />;
+          return <Marker icon={{url: "/bus_marker.png", scaledSize:{width: 40, height: 46}}} position={bus} />;
+        })}
+        {coffeeShops.map((shop) => {
+          return <Marker icon={{url: "/coffee_marker.png", scaledSize: {width:40, height: 46}}} position={shop}/>
         })}
       </>
+        {foodShops.map((shop)=>{
+        return <Marker icon={{url: "/food_marker.png", scaledSize: {width: 40, height: 46}}} position={shop} />
+      })}
     </GoogleMap>
   ) : (
     <></>
