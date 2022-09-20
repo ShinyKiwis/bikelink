@@ -5,6 +5,7 @@ import {
   Marker,
   InfoWindow,
 } from "@react-google-maps/api";
+import { filterOptions } from "../SearchBar";
 
 const containerStyle = {
   width: "100vw",
@@ -25,18 +26,18 @@ const currentPos = {
 
 const foodShops = [
   {
-    lat: 10.877631992125885, 
-    lng: 106.80922815880977
+    lat: 10.877631992125885,
+    lng: 106.80922815880977,
   },
   {
-    lat: 10.881349049562433, 
-    lng:106.8112306239279
+    lat: 10.881349049562433,
+    lng: 106.8112306239279,
   },
   {
-    lat: 10.882766400203234, 
-    lng:106.8120717549753
-  }
-]
+    lat: 10.882766400203234,
+    lng: 106.8120717549753,
+  },
+];
 
 const coffeeShops = [
   {
@@ -60,9 +61,9 @@ const coffeeShops = [
     lng: 106.79872198927286,
   },
   {
-    lat: 10.875440220610354, 
-    lng: 106.80716356465716
-  }
+    lat: 10.875440220610354,
+    lng: 106.80716356465716,
+  },
 ];
 
 const buses = [
@@ -124,9 +125,9 @@ const buses = [
   },
 ];
 
-function MyComponent() {
+function MyComponent({ selectedFilter }) {
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyACB4Wr6HTShXaKeAq2XWPW1NSsv5trMTk",
+    googleMapsApiKey: "INSERT_YOUR_API_KEY_HERE",
     libraries: libraries,
   });
 
@@ -144,6 +145,7 @@ function MyComponent() {
     setMap(null);
   }, []);
 
+  console.log(filterOptions);
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
@@ -155,16 +157,44 @@ function MyComponent() {
       {/* Child components, such as markers, info windows, etc. */}
       <>
         <Marker position={currentPos} />
-        {buses.map((bus) => {
-          return <Marker icon={{url: "/bus_marker.png", scaledSize:{width: 40, height: 46}}} position={bus} />;
-        })}
-        {coffeeShops.map((shop) => {
-          return <Marker icon={{url: "/coffee_marker.png", scaledSize: {width:40, height: 46}}} position={shop}/>
-        })}
+
+        {selectedFilter.includes("Bus") &&
+          buses.map((bus) => {
+            return (
+              <Marker
+                icon={{
+                  url: "/bus_marker.png",
+                  scaledSize: { width: 40, height: 46 },
+                }}
+                position={bus}
+              />
+            );
+          })}
+        {selectedFilter.includes("Place") &&
+          coffeeShops.map((shop) => {
+            return (
+              <Marker
+                icon={{
+                  url: "/coffee_marker.png",
+                  scaledSize: { width: 40, height: 46 },
+                }}
+                position={shop}
+              />
+            );
+          })}
       </>
-        {foodShops.map((shop)=>{
-        return <Marker icon={{url: "/food_marker.png", scaledSize: {width: 40, height: 46}}} position={shop} />
-      })}
+      {selectedFilter.includes("Place") &&
+        foodShops.map((shop) => {
+          return (
+            <Marker
+              icon={{
+                url: "/food_marker.png",
+                scaledSize: { width: 40, height: 46 },
+              }}
+              position={shop}
+            />
+          );
+        })}
     </GoogleMap>
   ) : (
     <></>

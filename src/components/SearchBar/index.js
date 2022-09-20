@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchBarStyle from "./SearchBar.module.css";
 import { BsSearch } from "react-icons/bs";
 import { GoSettings } from "react-icons/go";
@@ -41,38 +41,37 @@ const SearchInput = () => {
   return (
     <div className={SearchBarStyle.search_input_container}>
       <BsSearch className={SearchBarStyle.search_icon} />
-        <input
-          type="text"
-          placeholder="Search Location"
-          className={SearchBarStyle.search_input}
-        />
+      <input
+        type="text"
+        placeholder="Search Location"
+        className={SearchBarStyle.search_input}
+      />
     </div>
   );
 };
 
-export { SearchInput };
-
-const SearchBar = () => {
+const SearchBar = ({ selectedFilter, setSelectedFilter }) => {
   // Loaded Google Map here in order for AutoComplete to work
   // The API keep saying quota limitation
-  const [selectedFilter, setSelectedFilter] = useState([]);
   const filterOptions = ["Place", "Bus", "Bike", "Theaters", "Markets"];
-  return(
+  console.log(selectedFilter);
+  return (
     <>
-        <div className={SearchBarStyle.search_container}>
-          <SearchInput />
-        </div>
-        <Filter />
-        <div className={SearchBarStyle.filter_options_container}>
-          {filterOptions.map((option) => (
-            <FilterItem
-              title={option}
-              selectedFilter={selectedFilter}
-              setSelectedFilter={setSelectedFilter}
-            />
-          ))}
-        </div>
-      </>
-  ) 
-}
+      <div className={SearchBarStyle.search_container}>
+        <SearchInput />
+      </div>
+      <Filter />
+      <div className={SearchBarStyle.filter_options_container}>
+        {filterOptions.map((option) => (
+          <FilterItem
+            title={option}
+            selectedFilter={selectedFilter}
+            setSelectedFilter={setSelectedFilter}
+          />
+        ))}
+      </div>
+    </>
+  );
+};
+
 export default SearchBar;
